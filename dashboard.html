@@ -4,21 +4,76 @@
     <meta charset="UTF-8">
     <title>Live Protocol Triage</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #2c3e50; color: white; margin: 0; padding: 20px; }
-        h1 { text-align: center; color: #ecf0f1; margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
-        .card { background: #34495e; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-size: 20px; line-height: 1.5; }
+        /* Base styling and Flexbox layout */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #2c3e50; 
+            color: white; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            height: 100vh; /* Fills the whole screen */
+            overflow: hidden; 
+        }
+        
+        /* The Left Sidebar for the QR Code */
+        .sidebar { 
+            width: 320px; 
+            background-color: #1a252f; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            border-right: 2px solid #34495e; 
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+        }
+        .sidebar h2 { color: #ecf0f1; font-size: 24px; margin-bottom: 10px; }
+        .sidebar p { color: #bdc3c7; font-size: 16px; margin-bottom: 30px; line-height: 1.4; }
+        
+        /* The QR Code image styling */
+        .sidebar img { 
+            width: 250px; 
+            height: 250px; 
+            background: white; 
+            padding: 10px; 
+            border-radius: 8px; 
+        }
+        
+        /* The Main Content Area for Submissions */
+        .main-content { 
+            flex: 1; 
+            padding: 30px; 
+            overflow-y: auto; /* Allows scrolling if many objectives come in */
+        }
+        h1 { text-align: center; color: #ecf0f1; margin-top: 0; margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+        .card { background: #34495e; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-size: 18px; line-height: 1.5; }
+        
+        /* SMART check highlight colors */
         .bad-verb { color: #e74c3c; font-weight: bold; text-decoration: underline; }
         .good-verb { color: #2ecc71; font-weight: bold; }
         .timestamp { font-size: 12px; color: #95a5a6; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
-    <h1>Live Protocol Triage: SMART Check</h1>
-    <div class="grid" id="dashboard">Loading incoming objectives...</div>
+
+    <div class="sidebar">
+        <h2>Join the Live Triage</h2>
+        <p>Scan the code to draft your SMART objective. It will appear on the board anonymously.</p>
+        
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://aravindbm.github.io/setting-research-objectives/index.html" alt="QR Code">
+    </div>
+
+    <div class="main-content">
+        <h1>Live Protocol Triage: SMART Check</h1>
+        <div class="grid" id="dashboard">Waiting for incoming objectives...</div>
+    </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbymAFhRRdHFV_1A28UFTwMaL7nfht_s4bkI0CYJTiJHPKPysJGaaVbqJtRZskfZbxMZ/exec'; // PASTE YOUR URL
+        // REPLACE WITH YOUR GOOGLE APPS SCRIPT URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbymAFhRRdHFV_1A28UFTwMaL7nfht_s4bkI0CYJTiJHPKPysJGaaVbqJtRZskfZbxMZ/exec'; 
         
         // The automated feedback dictionary
         const badVerbs = ['understand', 'know', 'appreciate', 'study', 'see', 'check', 'explore', 'believe', 'prove'];
